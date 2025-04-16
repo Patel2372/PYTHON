@@ -1,43 +1,37 @@
-import pandas as pd
+import tkinter as tk
 
-# Sample data: Student records
-data = {
-    "ID": [40, 36, 30],
-    "Name": ["Jenil", "Het", "Ali"],
-    "Age": [19, 20, 20],
-    "Grade": ["C", "C", "C"]
-}
+# Create the main window
+root = tk.Tk()
+root.title("Chess Board")
 
-# Create a DataFrame
-df = pd.DataFrame(data)
+# Board size
+rows, cols = 8, 8
+square_size = 40  # Size of each square
 
-# Function to display records
-def display_records():
-    print("\nStudent Records:")
-    print(df)
+# Colors
+light_color = "#F0D9B5"  # Light brown
+dark_color = "#B58863"   # Dark brown
 
-# Function to add a new student
-def add_student(student_id, name, age, grade):
-    global df
-    new_student = pd.DataFrame({"ID": [student_id], "Name": [name], "Age": [age], "Grade": [grade]})
-    df = pd.concat([df, new_student], ignore_index=True)
-    print(f"\n✅ Student {name} added successfully!")
+# Chess piece placement
+pieces = [
+    ["♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜"],
+    ["♟"] * 8,
+    [""] * 8,
+    [""] * 8,
+    [""] * 8,
+    [""] * 8,
+    ["♙"] * 8,
+    ["♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖"],
+]
 
-# Function to save to CSV
-def save_to_csv(filename="students.csv"):
-    df.to_csv(filename, index=False)
-    print(f"\n💾 Data saved to {filename}")
+# Create the chessboard
+for row in range(rows):
+    for col in range(cols):
+        color = light_color if (row + col) % 2 == 0 else dark_color
+        square = tk.Label(root, bg=color, width=4, height=2, font=("Arial", 24))
+        square.grid(row=row, column=col)
+        if pieces[row][col]:  # If there's a piece, display it
+            square.config(text=pieces[row][col])
 
-# Function to load from CSV
-def load_from_csv(filename="students.csv"):
-    global df
-    df = pd.read_csv(filename)
-    print("\n📂 Data loaded successfully!")
-
-# Test the functions
-display_records()
-add_student(36, "krish", 20, "B")  # Adding a new student
-display_records()
-save_to_csv()  # Save data to CSV
-load_from_csv()  # Reload data
-
+# Run the Tkinter event loop
+root.mainloop()
